@@ -71,14 +71,15 @@ vector<vector<tuple<int, int>>> readFile ()
         int length;
         // Consume the vertex at the start of each line in input file
         ss >> vertex;
+        // Temperary vector for storing the neighbors of each vertex and their respective lengths
+        vector<tuple<int, int>> temp;
 
         while (ss >> vertex >> comma >> length)
         {
             // Push each pair of vertex and length on each line onto the graph as a tuple
-            vector<tuple<int, int>> temp2;
-            temp2.push_back(make_tuple(vertex, length));
-            graph.push_back(temp2);
+            temp.push_back(make_tuple(vertex, length));
         }
+        graph.push_back(temp);
     }
 
     return graph;
