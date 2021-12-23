@@ -5,43 +5,25 @@
 
 using namespace std;
 
-vector<vector<tuple<int, int>>> readFile();
-vector<tuple<int, int>> Dijkstra_Algo(vector<MinHeap> graph);
+vector<vector<tuple<int, int>>> readFile ();
+vector<tuple<int, int>> init_shortest_paths (int graph_size);
+vector<tuple<int, int>> Dijkstra_Algo (vector<vector<tuple<int, int>>> graph);
 
 int main() 
 {
+    // A vector represents the graph
+    // Each index of the vector is a vertex in the graph
+    vector<vector<tuple<int, int>>> graph;
+    // A vector that contains each vertex and its shortest path from the staring point
+    vector<tuple<int, int>> shortest_paths_vector;
 
-    vector<MinHeap> graph;
+    graph = readFile();
 
-    vector<vector<tuple<int, int>>> graph2;
-    graph2 = readFile();
+    // Initialize the shortest_paths vector to have the same size as the graph
+    shortest_paths_vector = init_shortest_paths(graph.size());
 
-    // fstream data;
-    // data.open("miniData.txt", ios_base::in);
-
-    // string line;
-
-    // while(getline(data, line))
-    // {
-    //     stringstream ss(line);
-        
-    //     int vertex;
-    //     int neighbor;
-    //     char comma;
-    //     int length;
-
-    //     vector<tuple<int, int>> heap;
-
-    //     ss >> vertex;
-
-    //     while( ss >> neighbor >> comma >> length)
-    //     {
-    //         auto tuple = make_tuple(neighbor, length);
-    //         heap.push_back(tuple);
-    //     }
-    //     MinHeap minHeap(heap, heap.size(), heap.size());
-    //     graph.push_back(minHeap);
-    // }
+    // Turn the shortest_paths_vector into a minimum heap
+    MinHeap shortest_paths(shortest_paths_vector, shortest_paths_vector.size(), shortest_paths_vector.size());
 
     // Dijkstra_Algo(graph);
 
@@ -58,10 +40,6 @@ vector<vector<tuple<int, int>>> readFile ()
     // A vector represents the graph
     // Each index of the vector is a vertex in the graph
     vector<vector<tuple<int, int>>> graph;
-    vector<tuple<int, int>> temp;
-    // Since the input file uses 1 based indexing, push a placeholder tuple at index 0 for easier indexing later
-    temp.push_back(make_tuple(0, 0));
-    graph.push_back(temp);
 
     while (getline(data, line))
     {
@@ -69,70 +47,51 @@ vector<vector<tuple<int, int>>> readFile ()
         int vertex;
         char comma;
         int length;
+
         // Consume the vertex at the start of each line in input file
         ss >> vertex;
         // Temperary vector for storing the neighbors of each vertex and their respective lengths
         vector<tuple<int, int>> temp;
-
+        
         while (ss >> vertex >> comma >> length)
         {
             // Push each pair of vertex and length on each line onto the graph as a tuple
             temp.push_back(make_tuple(vertex, length));
         }
-        graph.push_back(temp);
-    }
 
+        
+        if (!temp.empty())
+            graph.push_back(temp);
+        // If a line in the input file only has a vertex, then push a tuple of 0 as its neighbor
+        else
+        {
+            vector<tuple<int, int>> temp2;
+            temp2.push_back(make_tuple(0, 0));
+            graph.push_back(temp2);
+        }
+    }
     return graph;
 }
 
-// vector<tuple<int, int>> Dijkstra_Algo (vector<MinHeap> graph) 
-// {
-//     vector<MinHeap> processed;
+
+vector<tuple<int, int>> init_shortest_paths (int graph_size)
+{
+    vector<tuple<int, int>> shortest_paths;
+
+    // The starting vertex is 1 and has the length 0
+    shortest_paths.push_back( make_tuple(1, 0));
+
+    // Each element is initialize to -1 to represent positive infinity.
+    // Since Dijkstra's algorithm does not work on negative edge lengths & all input edge are positive, it's safe to use -1 here.
+    for (int i = 1; i < graph_size; i++)
+    {   
+        shortest_paths.push_back( make_tuple(i, -1) );
+    }
     
-//     vector<MinHeap> toProcess;
+    return shortest_paths;
+}
+
+vector<tuple<int, int>> Dijkstra_Algo (vector<vector<tuple<int, int>>> graph) 
+{
     
-//     vector<tuple<int, int>> shortest_paths;
-
-//     toProcess.push_back(graph[0]);
-//     shortest_paths.push_back(make_tuple(0, 0));
-
-
-
-//     // iterator
-//     int i = 0;
-//     int j = 1;
-
-//     while (i < graph.size())
-//     {
-//         while (!toProcess[j - 1].empty())
-//         {
-//         // v is the next vertex to be processed
-//         // j_to_v is the length from processed[j] to v
-//         auto [v, j_to_v] = toProcess[j - 1].getMin();
-
-//         // Resize the arrays for array indexing    
-//         if (v > toProcess.size())
-//         {
-//             toProcess.resize(v);
-//         }
-//         if (v > shortest_paths.size())
-//         {
-//             shortest_paths.resize(v);
-//         }
-//         // computed_v_len is the shortest length from the first vertex to v
-//         int computed_v_len = get<1>(shortest_paths[j - 1]) + j_to_v;
-
-//             // shortest_paths now has the shortest length from the first vertex to v
-//         shortest_paths[v - 1] = make_tuple(v, computed_v_len);
-        
-//         toProcess[j - 1].removemin();
-//        }
-
-//        j = v;
-//        i++;
-
-//     }
-
-//     return shortest_paths;
-    
-// }
+}

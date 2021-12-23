@@ -17,7 +17,8 @@ public:
 
   // Constructor supporting preloading of heap contents
   MinHeap(vector<tuple<int, int>> h, int num, int max)
-  { Heap = h;  n = num;  size = max;  buildheap(); }
+  { Heap = h;  n = num;  size = max; }
+  // { Heap = h;  n = num;  size = max;  buildheap(); }
 
   // Return current size of the heap
   int heapsize() { return n; }
