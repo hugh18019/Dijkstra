@@ -128,7 +128,7 @@ vector<int> Dijkstra_Algo (vector<MinHeap> & graph, int num_edges, ofstream & de
     vector<bool> processed;
     processed.resize(graph.size(), false);
 
-    int i = 0;
+    int i = 0; 
 
     while(i < num_edges)
     {
